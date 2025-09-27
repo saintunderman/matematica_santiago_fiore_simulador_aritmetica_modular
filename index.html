@@ -1,0 +1,1167 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Aritmética Modular - Recurso Educativo Avanzado</title>
+    <!-- MathJax para notación matemática -->
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script>
+        window.MathJax = {
+            tex: {
+                inlineMath: [['$', '$'], ['\\(', '\\)']],
+                displayMath: [['$$', '$$'], ['\\[', '\\]']]
+            }
+        };
+    </script>
+    <style>
+        /* Estilos (se mantienen igual) */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .header {
+            text-align: center;
+            color: white;
+            margin-bottom: 30px;
+            background: rgba(0,0,0,0.1);
+            padding: 30px;
+            border-radius: 15px;
+            backdrop-filter: blur(10px);
+        }
+
+        .header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .nav-tabs {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-bottom: 30px;
+            gap: 10px;
+        }
+
+        .nav-tab {
+            padding: 12px 24px;
+            background: white;
+            border: none;
+            border-radius: 25px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+
+        .nav-tab:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+        }
+
+        .nav-tab.active {
+            background: linear-gradient(45deg, #ff6b6b, #ee5a24);
+            color: white;
+            transform: translateY(-2px);
+        }
+
+        .tab-content {
+            display: none;
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            margin-bottom: 20px;
+        }
+
+        .tab-content.active {
+            display: block;
+            animation: fadeIn 0.5s ease-in;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .section {
+            margin-bottom: 30px;
+        }
+
+        .section h2 {
+            color: #2c3e50;
+            margin-bottom: 15px;
+            font-size: 1.8rem;
+            border-bottom: 3px solid #3498db;
+            padding-bottom: 10px;
+        }
+
+        .section h3 {
+            color: #34495e;
+            margin-bottom: 10px;
+            font-size: 1.3rem;
+        }
+
+        .formula-box {
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            padding: 20px;
+            border-radius: 10px;
+            margin: 15px 0;
+            border-left: 4px solid #3498db;
+            font-family: 'Courier New', monospace;
+            font-size: 1.1rem;
+            overflow-x: auto;
+            text-align: center;
+        }
+
+        .example-box {
+            background: linear-gradient(135deg, #ffeaa7 0%, #fdcb6e 100%);
+            padding: 20px;
+            border-radius: 10px;
+            margin: 15px 0;
+            border-left: 4px solid #e17055;
+        }
+
+        .interactive-section {
+            background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%);
+            padding: 25px;
+            border-radius: 15px;
+            margin: 20px 0;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+
+        .input-group {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin: 15px 0;
+            flex-wrap: wrap;
+        }
+
+        .input-group label {
+            font-weight: bold;
+            min-width: 80px;
+        }
+
+        .input-group input, .input-group select {
+            padding: 10px;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            font-size: 16px;
+            width: 100px;
+            transition: border-color 0.3s ease;
+        }
+
+        .input-group input:focus, .input-group select:focus {
+            border-color: #3498db;
+            outline: none;
+            box-shadow: 0 0 10px rgba(52, 152, 219, 0.3);
+        }
+
+        .btn {
+            background: linear-gradient(45deg, #3498db, #2980b9);
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            margin: 5px;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+
+        .result {
+            background: linear-gradient(135deg, #00b894 0%, #00cec9 100%);
+            color: white;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 15px 0;
+            font-size: 1.1rem;
+            font-weight: bold;
+            min-height: 50px;
+            display: flex;
+            align-items: center;
+            overflow-x: auto;
+        }
+        
+        .error-result {
+             background: linear-gradient(135deg, #e17055 0%, #fd79a8 100%);
+        }
+
+        .visualization {
+            background: #f8f9fa;
+            border: 2px solid #dee2e6;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 20px 0;
+            text-align: center;
+        }
+
+        .circle-diagram {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 200px;
+            height: 200px;
+            border: 3px solid #3498db;
+            border-radius: 50%;
+            margin: 10px;
+            position: relative;
+            background: linear-gradient(135deg, #ffffff 0%, #f1f2f6 100%);
+        }
+
+        .circle-number {
+            position: absolute;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            background: #e74c3c;
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+        }
+
+        .steps-list {
+            background: linear-gradient(135deg, #e8f5e8 0%, #d4f1d4 100%);
+            padding: 20px;
+            border-radius: 10px;
+            margin: 15px 0;
+        }
+
+        .step {
+            margin: 10px 0;
+            padding: 10px;
+            background: white;
+            border-radius: 8px;
+            border-left: 4px solid #27ae60;
+        }
+
+        .properties-list {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            margin: 20px 0;
+        }
+
+        .property-item {
+            background: linear-gradient(135deg, #e8f5e8 0%, #d4f1d4 100%);
+            padding: 15px;
+            border-radius: 8px;
+            border-left: 4px solid #27ae60;
+        }
+
+        .operation-section {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            margin: 30px 0;
+        }
+
+        .operation-item {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            padding: 20px;
+            background: #f8f9fa;
+            border-radius: 10px;
+            margin-bottom: 20px;
+        }
+
+        .operation-description {
+            flex: 1;
+        }
+
+        .operation-example {
+            flex: 1;
+            margin-top: 15px;
+        }
+
+        .simplification-note {
+            background: linear-gradient(135deg, #fff3cd 0%, #ffeaa7 100%);
+            padding: 15px;
+            border-radius: 8px;
+            margin: 15px 0;
+            border-left: 4px solid #ffc107;
+        }
+
+        /* Footer style */
+        .footer {
+            text-align: center;
+            margin-top: 50px;
+            padding: 20px;
+            background: rgba(0,0,0,0.1);
+            color: white;
+            border-radius: 15px;
+            backdrop-filter: blur(10px);
+            font-size: 0.9rem;
+        }
+        .footer a {
+            color: #a8c0ff;
+            text-decoration: none;
+        }
+        .footer a:hover {
+            text-decoration: underline;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 10px;
+            }
+            
+            .header h1 {
+                font-size: 2rem;
+            }
+            
+            .nav-tabs {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .input-group {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            
+            .circle-diagram {
+                width: 150px;
+                height: 150px;
+            }
+            
+            .operation-item {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header class="header">
+            <h1>🧮 Aritmética Modular</h1>
+        </header>
+
+        <nav class="nav-tabs">
+            <button class="nav-tab active" onclick="showTab('conceptos')">Conceptos Básicos</button>
+            <button class="nav-tab" onclick="showTab('operaciones')">Operaciones</button>
+            <button class="nav-tab" onclick="showTab('simulador')">Simulador</button>
+            <button class="nav-tab" onclick="showTab('ejercicios')">Ejercicios</button>
+        </nav>
+
+        <div id="conceptos" class="tab-content active">
+            <div class="historical-note">
+                <h3>📜 Nota Histórica</h3>
+                <p>La aritmética modular fue desarrollada sistemáticamente por Carl Friedrich Gauss en su obra <em>Disquisitiones Arithmeticae</em> (1801), aunque conceptos similares ya habían sido utilizados por matemáticos anteriores. Gauss introdujo la notación $a \equiv b \pmod{m}$ que seguimos utilizando hoy en día. Esta rama de las matemáticas ha demostrado ser fundamental en áreas como la teoría de números, criptografía y álgebra abstracta.</p>
+            </div>
+
+            <div class="section">
+                <h2>¿Qué es la Aritmética Modular?</h2>
+                <p>La aritmética modular es un sistema de aritmética para enteros donde los números "se envuelven" después de alcanzar cierto valor llamado módulo. Es como un reloj: después de las 12 horas, volvemos a 1.</p>
+                
+                <div class="formula-box">
+                    <strong>Definición:</strong> Decimos que $a \equiv b \pmod{m}$ si y solo si $m$ divide a $(a - b)$.
+                    $$a \equiv b \pmod{m} \iff m \mid (a-b)$$
+                </div>
+
+                <div class="important-note">
+                    <h4>Condiciones del Módulo</h4>
+                    <p>El módulo $m$ debe ser un número natural mayor que 1:</p>
+                    <div class="formula-box">
+                        $$m \in \mathbb{N}, \quad m > 1$$
+                    </div>
+                </div>
+
+                <div class="example-box">
+                    <h3>Ejemplo Visual - Reloj de 12 horas:</h3>
+                    <p>En un reloj de 12 horas, <strong>$7 + 8 = 15$</strong> se convierte en <strong>$7 + 8 \equiv 3 \pmod{12}$</strong>.</p>
+                    <p>Esto se debe a que $15 - 3 = 12$, y 12 es divisible por 12.</p>
+                </div>
+
+                <div class="visualization">
+                    <h3>Visualización: Módulo 5</h3>
+                    <div class="circle-diagram" id="mod5-visual">
+                        <span style="font-size: 1.5rem; font-weight: bold;">mod 5</span>
+                    </div>
+                    <p>Los números se distribuyen en 5 posiciones (0, 1, 2, 3, 4).</p>
+                </div>
+            </div>
+
+            <div class="section">
+                <h2>Vínculo con la División</h2>
+                <p>La aritmética modular está íntimamente relacionada con la división de enteros. Cuando dividimos un número $a$ entre $m$, obtenemos:</p>
+                
+                <div class="formula-box">
+                    $$a = m \cdot q + r \quad \text{donde} \quad 0 \le r < m$$
+                </div>
+                
+                <p>En esta ecuación:</p>
+                <ul>
+                    <li>$a$ es el dividendo.</li>
+                    <li>$m$ es el divisor (y nuestro módulo).</li>
+                    <li>$q$ es el cociente.</li>
+                    <li>$r$ es el resto, que es exactamente $a \bmod m$.</li>
+                </ul>
+                
+                <p>Por lo tanto, $a \equiv r \pmod{m}$, ya que $a - r = m \cdot q$ es divisible por $m$.</p>
+                
+                <div class="example-box">
+                    <h3>Ejemplo:</h3>
+                    <p>Para $a = 17$ y $m = 5$:</p>
+                    <div class="formula-box">
+                        $17 = 5 \cdot 3 + 2$
+                    </div>
+                    <p>Por lo tanto, $17 \equiv 2 \pmod{5}$.</p>
+                </div>
+            </div>
+
+            <div class="section">
+                <h2>Propiedades Fundamentales</h2>
+                <div class="properties-list">
+                    <div class="property-item">
+                        <h3>🔄 Reflexiva</h3>
+                        <div class="formula-box">
+                            $$a \equiv a \pmod{m}$$
+                        </div>
+                        <p>Todo número es congruente consigo mismo.</p>
+                    </div>
+                    <div class="property-item">
+                        <h3>↔️ Simétrica</h3>
+                        <div class="formula-box">
+                            $$\text{Si } a \equiv b \pmod{m}, \text{ entonces } b \equiv a \pmod{m}$$
+                        </div>
+                        <p>La congruencia funciona en ambas direcciones.</p>
+                    </div>
+                    <div class="property-item">
+                        <h3>🔗 Transitiva</h3>
+                        <div class="formula-box">
+                            $$\text{Si } a \equiv b \pmod{m} \text{ y } b \equiv c \pmod{m}, \text{ entonces } a \equiv c \pmod{m}$$
+                        </div>
+                        <p>Las congruencias se pueden encadenar.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="operaciones" class="tab-content">
+            <div class="section">
+                <h2>Operaciones en Aritmética Modular</h2>
+                
+                <div class="operation-section">
+                    <!-- Suma Modular -->
+                    <div class="operation-item">
+                        <div class="operation-description">
+                            <h3>➕ Suma Modular</h3>
+                            <div class="formula-box">
+                                $$(a + b) \pmod m \equiv ((a \pmod m) + (b \pmod m)) \pmod m$$
+                            </div>
+                            <p>La suma modular conserva la propiedad de congruencia. Podemos sumar los restos módulo $m$ de los números en lugar de los números completos.</p>
+                        </div>
+                        <div class="operation-example">
+                            <div class="example-box">
+                                <strong>Ejemplo:</strong> $(7 + 9) \pmod 5$
+                                <div class="formula-box" style="text-align: left; background: none; padding: 0;">
+                                    $$
+                                    \begin{aligned}
+                                    (7 + 9) \pmod 5 &\equiv (7 \pmod 5 + 9 \pmod 5) \pmod 5 \\
+                                    &\equiv (2 + 4) \pmod 5 \\
+                                    &\equiv 6 \pmod 5 \\
+                                    &\equiv 1 \pmod 5
+                                    \end{aligned}
+                                    $$
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Multiplicación Modular -->
+                    <div class="operation-item">
+                        <div class="operation-description">
+                            <h3>✖️ Multiplicación Modular</h3>
+                            <div class="formula-box">
+                                $$(a \times b) \pmod m \equiv ((a \pmod m) \times (b \pmod m)) \pmod m$$
+                            </div>
+                            <p>Al igual que con la suma, podemos multiplicar los restos módulo $m$ de los números en lugar de los números completos.</p>
+                            <div class="simplification-note">
+                                <h4>⚠️ Propiedad Cancelativa</h4>
+                                <p>En la multiplicación modular, podemos cancelar factores comunes <strong>solo si</strong> el factor que cancelamos es coprimo con el módulo. Es decir:</p>
+                                <div class="formula-box">
+                                    $$\text{Si } \gcd(c, m) = 1, \text{ entonces } ac \equiv bc \pmod{m} \Rightarrow a \equiv b \pmod{m}$$
+                                </div>
+                                <p>Si $\gcd(c, m) \neq 1$, la cancelación no es válida y puede llevar a resultados incorrectos.</p>
+                                <div class="example-box">
+                                    <strong>Ejemplo no válido:</strong> Tenemos $4 \cdot 3 \equiv 2 \cdot 3 \pmod{6}$ (ambos lados son congruentes a $0 \pmod{6}$), pero <strong>no podemos cancelar</strong> el factor 3 porque $\gcd(3, 6) = 3 \neq 1$. De hecho, $4 \not\equiv 2 \pmod{6}$.
+                                </div>
+                                <div class="example-box">
+                                    <strong>Ejemplo válido:</strong> Tenemos $4 \cdot 2 \equiv 5 \cdot 4 \pmod{3}$ (ambos lados son congruentes a $2 \pmod{3}$), y <strong>sí podemos cancelar</strong> el factor 4 porque $\gcd(4, 3) = 1$, obteniendo $2 \equiv 5 \pmod{3}$.
+                                </div>
+                            </div>
+                        </div>
+                        <div class="operation-example">
+                            <div class="example-box">
+                                <strong>Ejemplo:</strong> $(7 \times 9) \pmod 5$
+                                <div class="formula-box" style="text-align: left; background: none; padding: 0;">
+                                    $$
+                                    \begin{aligned}
+                                    (7 \times 9) \pmod 5 &\equiv (7 \pmod 5 \times 9 \pmod 5) \pmod 5 \\
+                                    &\equiv (2 \times 4) \pmod 5 \\
+                                    &\equiv 8 \pmod 5 \\
+                                    &\equiv 3 \pmod 5
+                                    \end{aligned}
+                                    $$
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Potencia Modular -->
+                    <div class="operation-item">
+                        <div class="operation-description">
+                            <h3>🔢 Potencia Modular</h3>
+                            <div class="formula-box">
+                                $$a^k \pmod m \equiv ((a \pmod m)^k) \pmod m$$
+                            </div>
+                            <p>Para calcular potencias grandes módulo $m$, podemos reducir la base módulo $m$ antes de realizar la exponenciación, lo que simplifica enormemente el cálculo.</p>
+                        </div>
+                        <div class="operation-example">
+                            <div class="example-box">
+                                <strong>Ejemplo:</strong> $11^4 \pmod 7$
+                                <div class="formula-box" style="text-align: left; background: none; padding: 0;">
+                                    $$
+                                    \begin{aligned}
+                                    11^4 \pmod 7 &\equiv (11 \pmod 7)^4 \pmod 7 \\
+                                    &\equiv 4^4 \pmod 7 \\
+                                    &\equiv 256 \pmod 7 \\
+                                    &\equiv 4 \pmod 7
+                                    \end{aligned}
+                                    $$
+                                </div>
+                                <p>Nota: En lugar de calcular $11^4 = 14641$ y luego dividir por 7, podemos calcular $4^4 = 256$ que es mucho más manejable.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="interactive-section">
+                    <h3>🧪 Calculadora de Operaciones Modulares</h3>
+                    <div class="input-group">
+                        <label>a:</label>
+                        <input type="number" id="op-a" value="7">
+                        <label>Operación:</label>
+                        <select id="operacion" style="width: 150px;">
+                            <option value="+">Suma (+)</option>
+                            <option value="*">Multiplicación (×)</option>
+                            <option value="^">Potencia (^)</option>
+                        </select>
+                        <label>b:</label>
+                        <input type="number" id="op-b" value="9">
+                        <label>mod:</label>
+                        <input type="number" id="op-mod" value="5" min="2">
+                        <button class="btn" onclick="calcularOperacion()">Calcular</button>
+                    </div>
+                    <div class="result" id="resultado-operacion">Resultado aparecerá aquí</div>
+                </div>
+            </div>
+
+            <div class="section">
+                <h2>Inverso Multiplicativo y Algoritmo de Euclides Extendido</h2>
+                <p>El inverso multiplicativo de $a$ módulo $m$ es un entero $a^{-1}$ tal que $a \cdot a^{-1} \equiv 1 \pmod{m}$. Este inverso existe si y solo si $\gcd(a, m) = 1$. Se puede encontrar usando el Algoritmo de Euclides Extendido, que halla enteros $x$ e $y$ para la identidad de Bézout: $ax + my = \gcd(a,m)$. Si el $\gcd$ es 1, entonces $ax \equiv 1 \pmod{m}$, y $x$ es el inverso.</p>
+                <div class="interactive-section">
+                    <h3>🔍 Encontrar Inverso Multiplicativo</h3>
+                    <div class="input-group">
+                        <label>Número a:</label>
+                        <input type="number" id="inv-num" value="3">
+                        <label>Módulo m:</label>
+                        <input type="number" id="inv-mod" value="7" min="2">
+                        <button class="btn" onclick="encontrarInverso()">Encontrar Inverso</button>
+                    </div>
+                    <div class="result" id="resultado-inverso">El inverso aparecerá aquí</div>
+                    <div class="steps-list" id="pasos-euclides"></div>
+                </div>
+            </div>
+
+            <div class="section">
+                <h2>Ecuaciones Lineales de Congruencia</h2>
+                <p>Una ecuación lineal de congruencia tiene la forma $ax \equiv b \pmod{m}$. El objetivo es encontrar todos los valores de $x$ que satisfacen la ecuación.</p>
+                <div class="important-note">
+                    <h4>Condición para la Solución</h4>
+                    <p>La ecuación $ax \equiv b \pmod{m}$ tiene solución si y solo si $d = \gcd(a, m)$ divide a $b$. Si esta condición se cumple, existen exactamente $d$ soluciones incongruentes módulo $m$.</p>
+                </div>
+                 <div class="interactive-section">
+                    <h3>⚙️ Resolver $ax \equiv b \pmod{m}$</h3>
+                    <div class="input-group">
+                        <label>a:</label> <input type="number" id="cong-a" value="4">
+                        <label>b:</label> <input type="number" id="cong-b" value="2">
+                        <label>m:</label> <input type="number" id="cong-m" value="6" min="2">
+                        <button class="btn" onclick="resolverCongruenciaLineal()">Resolver</button>
+                    </div>
+                    <div class="result" id="resultado-cong-lineal">La solución aparecerá aquí</div>
+                    <div class="steps-list" id="pasos-cong-lineal"></div>
+                </div>
+            </div>
+        </div>
+
+        <div id="simulador" class="tab-content">
+            <div class="section">
+                <h2>🎯 Simulador Interactivo</h2>
+                
+                <div class="interactive-section">
+                    <h3>Explorador de Congruencias</h3>
+                    <div class="input-group">
+                        <label>Módulo m:</label>
+                        <input type="number" id="sim-mod" value="7" min="2" max="20">
+                        <label>Rango de números:</label>
+                        <input type="number" id="sim-inicio" value="0" min="0">
+                        <label>hasta:</label>
+                        <input type="number" id="sim-fin" value="20" max="50">
+                        <button class="btn" onclick="generarTablaCongruencias()">Generar Tabla</button>
+                    </div>
+                    <div id="tabla-congruencias"></div>
+                </div>
+
+                <div class="interactive-section">
+                    <h3>Visualizador de Reloj Modular</h3>
+                    <div class="input-group">
+                        <label>Módulo:</label>
+                        <input type="number" id="reloj-mod" value="8" min="3" max="12">
+                        <label>Número a ubicar:</label>
+                        <input type="number" id="reloj-num" value="13">
+                        <button class="btn" onclick="mostrarRelojModular()">Visualizar</button>
+                    </div>
+                    <div class="visualization" id="reloj-container"></div>
+                </div>
+
+                <div class="interactive-section">
+                    <h3>Secuencias Modulares</h3>
+                    <div class="input-group">
+                        <label>Base a:</label>
+                        <input type="number" id="seq-base" value="2">
+                        <label>Módulo m:</label>
+                        <input type="number" id="seq-mod" value="5" min="2">
+                        <label>Términos:</label>
+                        <input type="number" id="seq-terminos" value="10">
+                        <button class="btn" onclick="generarSecuencia()">Generar Secuencia</button>
+                    </div>
+                    <div class="result" id="resultado-secuencia">La secuencia aparecerá aquí</div>
+                </div>
+            </div>
+        </div>
+
+        <div id="ejercicios" class="tab-content">
+            <div class="section">
+                <h2>💪 Ejercicios Prácticos</h2>
+                
+                <div class="interactive-section">
+                    <h3>🎲 Generador de Ejercicios Aleatorios</h3>
+                    <button class="btn" onclick="generarEjercicioAleatorio()">Generar Nuevo Ejercicio</button>
+                    <div id="ejercicio-aleatorio" style="margin-top: 20px;"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer class="footer">
+        <p>Este es un recurso educativo desarrollado por Santiago Fiore.</p>
+        <p>Más contenidos de matemática en: <a href="https://sites.google.com/view/santiago-fiore/portada" target="_blank">https://sites.google.com/view/santiago-fiore/portada</a></p>
+    </footer>
+
+    <script>
+        // --- FUNCIONES AUXILIARES DE TEORÍA DE NÚMEROS ---
+        
+        // Máximo Común Divisor
+        function gcd(a, b) {
+            if (b === 0) return Math.abs(a);
+            return gcd(b, a % b);
+        }
+
+        // Algoritmo de Euclides Extendido
+        function euclidesExtendido(a, b) {
+            if (a === 0) {
+                return { gcd: b, x: 0, y: 1 };
+            }
+            const resultado = euclidesExtendido(b % a, a);
+            const x = resultado.y - Math.floor(b / a) * resultado.x;
+            const y = resultado.x;
+            return { gcd: resultado.gcd, x: x, y: y };
+        }
+        
+        // Potencia modular eficiente (exponenciación binaria)
+        function potenciaModular(base, exp, mod) {
+            if (mod === 1) return 0;
+            let resultado = 1n;
+            base = BigInt(base) % BigInt(mod);
+            exp = BigInt(exp);
+            mod = BigInt(mod);
+
+            while (exp > 0n) {
+                if (exp % 2n === 1n) {
+                    resultado = (resultado * base) % mod;
+                }
+                exp = exp >> 1n;
+                base = (base * base) % mod;
+            }
+            return Number(resultado);
+        }
+
+        // Test de primalidad simple
+        function esPrimo(n) {
+            if (n <= 1) return false;
+            if (n <= 3) return true;
+            if (n % 2 === 0 || n % 3 === 0) return false;
+            for (let i = 5; i * i <= n; i = i + 6) {
+                if (n % i === 0 || n % (i + 2) === 0) return false;
+            }
+            return true;
+        }
+
+        // --- FUNCIONES DE LA INTERFAZ Y NAVEGACIÓN ---
+
+        function showTab(tabName) {
+            document.querySelectorAll('.tab-content').forEach(tab => tab.classList.remove('active'));
+            document.querySelectorAll('.nav-tab').forEach(btn => btn.classList.remove('active'));
+            document.getElementById(tabName).classList.add('active');
+            
+            let clickedButton = event.target;
+            while (clickedButton && !clickedButton.classList.contains('nav-tab')) {
+                clickedButton = clickedButton.parentNode;
+            }
+            if (clickedButton) {
+                clickedButton.classList.add('active');
+            }
+            
+            MathJax.typeset();
+            
+            if (tabName === 'simulador') {
+                generarTablaCongruencias();
+                mostrarRelojModular();
+                generarSecuencia();
+            }
+        }
+
+        function inicializarMod5() {
+            const container = document.getElementById('mod5-visual');
+            if (!container) return;
+            
+            if (container.children.length > 1 && container.querySelector('.circle-number')) return;
+            
+            container.innerHTML = '<span style="font-size: 1.5rem; font-weight: bold;">mod 5</span>';
+
+            const positions = [
+                {x: 0, y: -80}, {x: 76, y: -25}, {x: 47, y: 65}, {x: -47, y: 65}, {x: -76, y: -25}
+            ];
+            
+            positions.forEach((pos, i) => {
+                const num = document.createElement('div');
+                num.className = 'circle-number';
+                num.textContent = i;
+                num.style.left = `calc(50% + ${pos.x}px)`;
+                num.style.top = `calc(50% + ${pos.y}px)`;
+                num.style.transform = 'translate(-50%, -50%)';
+                container.appendChild(num);
+            });
+        }
+
+        // --- FUNCIONES DE CÁLCULO PARA LOS SIMULADORES ---
+
+        function calcularOperacion() {
+            const a = parseInt(document.getElementById('op-a').value);
+            const b = parseInt(document.getElementById('op-b').value);
+            const mod = parseInt(document.getElementById('op-mod').value);
+            const op = document.getElementById('operacion').value;
+            const resultadoElement = document.getElementById('resultado-operacion');
+            
+            if (isNaN(a) || isNaN(b) || isNaN(mod)) {
+                resultadoElement.className = 'result error-result';
+                resultadoElement.textContent = 'Por favor, introduce números válidos.';
+                return;
+            }
+            if (mod <= 1) {
+                resultadoElement.className = 'result error-result';
+                resultadoElement.textContent = 'El módulo debe ser mayor que 1.';
+                return;
+            }
+            
+            let resultado;
+            let operacionTexto;
+            
+            switch(op) {
+                case '+':
+                    resultado = (a % mod + b % mod) % mod;
+                    operacionTexto = `(${a} + ${b}) \\equiv ${resultado} \\pmod{${mod}}`;
+                    break;
+                case '*':
+                    resultado = ((a % mod) * (b % mod)) % mod;
+                    operacionTexto = `(${a} \\times ${b}) \\equiv ${resultado} \\pmod{${mod}}`;
+                    break;
+                case '^':
+                    resultado = potenciaModular(a, b, mod);
+                    operacionTexto = `${a}^{${b}} \\equiv ${resultado} \\pmod{${mod}}`;
+                    break;
+            }
+            
+            resultadoElement.className = 'result';
+            resultadoElement.innerHTML = `$$${operacionTexto}$$`;
+            MathJax.typesetPromise([resultadoElement]);
+        }
+        
+        function encontrarInverso() {
+            const num = parseInt(document.getElementById('inv-num').value);
+            const mod = parseInt(document.getElementById('inv-mod').value);
+            const resultadoElement = document.getElementById('resultado-inverso');
+            const pasosElement = document.getElementById('pasos-euclides');
+            
+            if (isNaN(num) || isNaN(mod) || mod <= 1) {
+                resultadoElement.className = 'result error-result';
+                resultadoElement.textContent = 'Entrada inválida. El módulo debe ser > 1.';
+                pasosElement.innerHTML = '';
+                return;
+            }
+            
+            // Manejo de números negativos
+            const a = ((num % mod) + mod) % mod;
+            
+            if (a === 0) {
+                resultadoElement.className = 'result error-result';
+                resultadoElement.innerHTML = `El número 0 no tiene inverso multiplicativo módulo $${mod}$.`;
+                pasosElement.innerHTML = '';
+                MathJax.typesetPromise([resultadoElement]);
+                return;
+            }
+            
+            const resultado = euclidesExtendido(a, mod);
+            
+            if (resultado.gcd === 1) {
+                const inverso = ((resultado.x % mod) + mod) % mod;
+                resultadoElement.className = 'result';
+                resultadoElement.innerHTML = `El inverso de $${a}$ módulo $${mod}$ es $${inverso}$`;
+                
+                // Verificación adicional
+                const verificacion = (a * inverso) % mod;
+                
+                pasosElement.innerHTML = `
+                    <h4>Pasos del Algoritmo de Euclides Extendido:</h4>
+                    <div class="step">1. Calculamos $\\gcd(${a}, ${mod}) = ${resultado.gcd}$</div>
+                    <div class="step">2. Aplicamos la identidad de Bézout: $${a} \\cdot (${resultado.x}) + ${mod} \\cdot (${resultado.y}) = ${resultado.gcd}$</div>
+                    <div class="step">3. Tomando módulo ${mod}: $${a} \\cdot (${resultado.x}) \\equiv 1 \\pmod{${mod}}$</div>
+                    <div class="step">4. El inverso es el coeficiente de $${a}$ ajustado a $0 \\le a^{-1} < m$: $a^{-1} = ((${resultado.x} \\pmod{${mod}}) + ${mod}) \\pmod{${mod}} = ${inverso}$</div>
+                    <div class="step">5. Verificación: $${a} \\times ${inverso} = ${a * inverso}$, y $${a * inverso} \\pmod{${mod}} = ${verificacion}$. ¡Correcto!</div>
+                `;
+            } else {
+                resultadoElement.className = 'result error-result';
+                resultadoElement.innerHTML = `$${a}$ no tiene inverso módulo $${mod}$ porque $\\gcd(${a}, ${mod}) = ${resultado.gcd} \\neq 1$`;
+                pasosElement.innerHTML = '';
+            }
+            MathJax.typesetPromise([resultadoElement, pasosElement]);
+        }
+
+        function resolverCongruenciaLineal() {
+            const a = parseInt(document.getElementById('cong-a').value);
+            const b = parseInt(document.getElementById('cong-b').value);
+            const m = parseInt(document.getElementById('cong-m').value);
+            const resultadoElement = document.getElementById('resultado-cong-lineal');
+            const pasosElement = document.getElementById('pasos-cong-lineal');
+
+            if (isNaN(a) || isNaN(b) || isNaN(m) || m <= 1) {
+                resultadoElement.className = 'result error-result';
+                resultadoElement.textContent = 'Entrada inválida. El módulo debe ser > 1.';
+                pasosElement.innerHTML = '';
+                return;
+            }
+            
+            let htmlPasos = '<h4>Pasos de la solución:</h4>';
+            
+            // Manejo de a = 0
+            if (a === 0) {
+                if (b % m === 0) {
+                    resultadoElement.className = 'result';
+                    resultadoElement.innerHTML = `La ecuación $0 \\cdot x \\equiv ${b} \\pmod{${m}}$ tiene infinitas soluciones: todos los enteros son solución.`;
+                    htmlPasos += `<div class="step">1. Como $a = 0$, la ecuación se convierte en $0 \\equiv ${b} \\pmod{${m}}$.</div>`;
+                    htmlPasos += `<div class="step">2. Esta ecuación es verdadera si y solo si $${m}$ divide a $${b}$.</div>`;
+                    htmlPasos += `<div class="step">3. Como $${b} \\pmod{${m}} = ${b % m}$, la ecuación ${b % m === 0 ? 'es siempre verdadera' : 'nunca se cumple'}.</div>`;
+                } else {
+                    resultadoElement.className = 'result error-result';
+                    resultadoElement.innerHTML = `La ecuación $0 \\cdot x \\equiv ${b} \\pmod{${m}}$ no tiene solución porque $${b} \\not\\equiv 0 \\pmod{${m}}$.`;
+                    htmlPasos += `<div class="step">1. Como $a = 0$, la ecuación se convierte en $0 \\equiv ${b} \\pmod{${m}}$.</div>`;
+                    htmlPasos += `<div class="step">2. Esta ecuación es verdadera si y solo si $${m}$ divide a $${b}$.</div>`;
+                    htmlPasos += `<div class="step">3. Como $${b} \\pmod{${m}} = ${b % m} \\neq 0$, la ecuación no tiene solución.</div>`;
+                }
+                pasosElement.innerHTML = htmlPasos;
+                MathJax.typesetPromise([resultadoElement, pasosElement]);
+                return;
+            }
+            
+            const d = gcd(a, m);
+            htmlPasos += `<div class="step">1. Calculamos $d = \\gcd(${a}, ${m}) = ${d}$</div>`;
+            
+            if (b % d !== 0) {
+                resultadoElement.className = 'result error-result';
+                resultadoElement.innerHTML = `No hay solución. $d = ${d}$ no divide a $b = ${b}$.`;
+                htmlPasos += `<div class="step">2. Comprobamos si $d$ divide a $b$. Como $${d}$ no divide a $${b}$ (es decir, $${b} \\pmod{${d}} = ${b % d} \\neq 0$), la ecuación no tiene solución.</div>`;
+                pasosElement.innerHTML = htmlPasos;
+                MathJax.typesetPromise([resultadoElement, pasosElement]);
+                return;
+            }
+            
+            htmlPasos += `<div class="step">2. Como $d=${d}$ divide a $b=${b}$, la ecuación tiene $${d}$ soluciones incongruentes módulo $${m}$.</div>`;
+            
+            const a_prime = a / d;
+            const b_prime = b / d;
+            const m_prime = m / d;
+            
+            htmlPasos += `<div class="step">3. Simplificamos la ecuación dividiendo por $d$: $${a_prime}x \\equiv ${b_prime} \\pmod{${m_prime}}$</div>`;
+            
+            // Encontrar el inverso multiplicativo de a_prime módulo m_prime
+            const inv_res_ext = euclidesExtendido(a_prime, m_prime);
+            const inv_mod = ((inv_res_ext.x % m_prime) + m_prime) % m_prime;
+            htmlPasos += `<div class="step">4. Hallamos el inverso multiplicativo de $${a_prime}$ módulo $${m_prime}$. Usando el Algoritmo de Euclides Extendido, encontramos que $${a_prime}^{-1} \\equiv ${inv_mod} \\pmod{${m_prime}}$.</div>`;
+            
+            const x0 = (b_prime * inv_mod) % m_prime;
+            // Aseguramos que x0 sea no negativo
+            const x0_nonneg = (x0 + m_prime) % m_prime;
+            htmlPasos += `<div class="step">5. La solución particular (primera solución) $x_0$ se obtiene multiplicando $b'$ por el inverso: $x_0 \\equiv ${b_prime} \\cdot ${inv_mod} \\equiv ${b_prime * inv_mod} \\equiv ${x0_nonneg} \\pmod{${m_prime}}$</div>`;
+            
+            let soluciones = [];
+            for (let i = 0; i < d; i++) {
+                soluciones.push(x0_nonneg + i * m_prime);
+            }
+            
+            resultadoElement.className = 'result';
+            resultadoElement.innerHTML = `Hay $${d}$ soluciones. Las soluciones son: $x \\equiv ${soluciones.join(', ')} \\pmod{${m}}$`;
+            htmlPasos += `<div class="step">6. Las $${d}$ soluciones incongruentes módulo $${m}$ son de la forma $x_k = x_0 + k \\cdot m'$, para $k=0, \\ldots, ${d-1}$.</div>`;
+
+            pasosElement.innerHTML = htmlPasos;
+            MathJax.typesetPromise([resultadoElement, pasosElement]);
+        }
+
+        function generarTablaCongruencias() {
+            const mod = parseInt(document.getElementById('sim-mod').value);
+            const inicio = parseInt(document.getElementById('sim-inicio').value);
+            const fin = parseInt(document.getElementById('sim-fin').value);
+            
+            if (isNaN(mod) || isNaN(inicio) || isNaN(fin) || mod <= 1) {
+                document.getElementById('tabla-congruencias').innerHTML = 
+                    '<div class="result error-result">Por favor, introduce números válidos. El módulo debe ser mayor que 1.</div>';
+                return;
+            }
+
+            let tabla = '<div class="visualization"><h4>Tabla de Congruencias mod ' + mod + '</h4>';
+            tabla += '<table style="width:100%; border-collapse: collapse; margin-top: 15px;">';
+            tabla += '<tr style="background: #3498db; color: white;">';
+            
+            for (let i = 0; i < mod; i++) {
+                tabla += '<th style="border: 1px solid #ddd; padding: 10px;">$\\equiv ' + i + '$</th>';
+            }
+            tabla += '</tr>';
+            
+            const clases = Array.from({length: mod}, () => []);
+            
+            for (let num = inicio; num <= fin; num++) {
+                const resto = ((num % mod) + mod) % mod;
+                clases[resto].push(num);
+            }
+            
+            const maxLength = Math.max(...clases.map(c => c.length));
+            
+            for (let fila = 0; fila < maxLength; fila++) {
+                tabla += '<tr>';
+                for (let clase = 0; clase < mod; clase++) {
+                    const num = clases[clase][fila];
+                    const color = num !== undefined ? '#e8f5e8' : '#f8f9fa';
+                    tabla += '<td style="border: 1px solid #ddd; padding: 8px; text-align: center; background: ' + color + ';">';
+                    tabla += num !== undefined ? num : '';
+                    tabla += '</td>';
+                }
+                tabla += '</tr>';
+            }
+            
+            tabla += '</table></div>';
+            document.getElementById('tabla-congruencias').innerHTML = tabla;
+            MathJax.typesetPromise([document.getElementById('tabla-congruencias')]);
+        }
+
+        function mostrarRelojModular() {
+            const mod = parseInt(document.getElementById('reloj-mod').value);
+            const num = parseInt(document.getElementById('reloj-num').value);
+            const container = document.getElementById('reloj-container');
+            container.innerHTML = '';
+            
+            if (isNaN(mod) || isNaN(num) || mod <= 1) {
+                container.innerHTML = '<div class="result error-result">Entrada inválida. Módulo debe ser > 1.</div>';
+                return;
+            }
+            const resto = ((num % mod) + mod) % mod;
+            
+            const titulo = document.createElement('h4');
+            titulo.innerHTML = `$$${num} \\equiv ${resto} \\pmod{${mod}}$$`;
+            titulo.style.marginBottom = '20px';
+            container.appendChild(titulo);
+            
+            const reloj = document.createElement('div');
+            reloj.className = 'circle-diagram';
+            reloj.style.width = '250px';
+            reloj.style.height = '250px';
+            reloj.innerHTML = '<span style="font-size: 1.2rem; font-weight: bold;">mod ' + mod + '</span>';
+            
+            const radio = 100;
+            for (let i = 0; i < mod; i++) {
+                const angulo = (i * 2 * Math.PI / mod) - (Math.PI / 2);
+                const x = radio * Math.cos(angulo);
+                const y = radio * Math.sin(angulo);
+                
+                const numElement = document.createElement('div');
+                numElement.className = 'circle-number';
+                numElement.textContent = i;
+                numElement.style.left = `calc(50% + ${x}px)`;
+                numElement.style.top = `calc(50% + ${y}px)`;
+                numElement.style.transform = 'translate(-50%, -50%)';
+                
+                if (i === resto) {
+                    numElement.style.background = '#e74c3c';
+                    numElement.style.transform = 'translate(-50%, -50%) scale(1.3)';
+                    numElement.style.boxShadow = '0 0 20px rgba(231, 76, 60, 0.6)';
+                    numElement.style.zIndex = '10';
+                } else {
+                    numElement.style.background = '#95a5a6';
+                }
+                
+                reloj.appendChild(numElement);
+            }
+            container.appendChild(reloj);
+            MathJax.typesetPromise([titulo, reloj]);
+        }
+
+        function generarSecuencia() {
+            const base = parseInt(document.getElementById('seq-base').value);
+            const mod = parseInt(document.getElementById('seq-mod').value);
+            const terminos = parseInt(document.getElementById('seq-terminos').value);
+            
+            if (isNaN(base) || isNaN(mod) || isNaN(terminos) || mod <= 1) {
+                document.getElementById('resultado-secuencia').className = 'result error-result';
+                document.getElementById('resultado-secuencia').innerHTML = 
+                    'Por favor, introduce números válidos. El módulo debe ser mayor que 1.';
+                return;
+            }
+            
+            let secuencia = [];
+            let resultadoHtml = `<p>Secuencia de $${base}^n \\pmod{${mod}}$: </p><p>`;
+            
+            for (let n = 0; n < terminos; n++) {
+                const valor = potenciaModular(base, n, mod);
+                secuencia.push(valor);
+            }
+            resultadoHtml += secuencia.join(', ');
+            resultadoHtml += '</p>';
+            
+            const periodo = detectarPeriodo(secuencia);
+            if (periodo > 0 && periodo < secuencia.length) {
+                resultadoHtml += `<p><strong>Período detectado:</strong> ${periodo} términos</p>`;
+            }
+            
+            document.getElementById('resultado-secuencia').className = 'result';
+            document.getElementById('resultado-secuencia').innerHTML = resultadoHtml;
+            MathJax.typesetPromise([document.getElementById('resultado-secuencia')]);
+        }
+
+        function detectarPeriodo(secuencia) {
+            for (let periodo = 1; periodo <= secuencia.length / 2; periodo++) {
+                let esPeriodico = true;
+                for (let i = periodo; i < secuencia.length; i++) {
+                    if (secuencia[i] !== secuencia[i % periodo]) {
+                        esPeriodico = false;
+                        break;
+                    }
+                }
+                if (esPeriodico) return periodo;
+            }
+            return 0;
+        }
+        
+        function generarEjercicioAleatorio() {
+            const tipos = ['congruencia', 'operacion', 'potencia', 'inverso'];
+            const tipo = tipos[Math.floor(Math.random() * tipos.length)];
+            const container = document.getElementById('ejercicio-aleatorio');
+            let ejercicio = '';
+            let correctAnswer;
+            
+            switch(tipo) {
+                case 'congruencia':
+                    const num1 = Math.floor(Math.random() * 100) + 50;
+                    const mod1 = Math.floor(Math.random() * 15) + 3;
+                    correctAnswer = num1 % mod1;
+                    ejercicio = `<div class="card"><h4>Encuentra el resto:</h4><div class="formula-box">$$${num1} \\pmod{${mod1}}$$</div><div class="input-group"><label>Respuesta:</label><input type="number" id="respuesta-aleatoria"><button class="btn" onclick="verificarAleatorio(${correctAnswer})">Verificar</button></div><div class="result" id="resultado-aleatorio"></div></div>`;
+                    break;
+                case 'operacion':
+                    const a = Math.floor(Math.random() * 50) + 10;
+                    const b = Math.floor(Math.random() * 50) + 10;
+                    const mod2 = Math.floor(Math.random() * 12) + 3;
+                    correctAnswer = (a * b) % mod2;
+                    ejercicio = `<div class="card"><h4>Multiplicación modular:</h4><div class="formula-box">$$(${a} \\times ${b}) \\pmod{${mod2}}$$</div><div class="input-group"><label>Respuesta:</label><input type="number" id="respuesta-aleatoria"><button class="btn" onclick="verificarAleatorio(${correctAnswer})">Verificar</button></div><div class="result" id="resultado-aleatorio"></div></div>`;
+                    break;
+                case 'potencia':
+                    const base = Math.floor(Math.random() * 5) + 2;
+                    const exp = Math.floor(Math.random() * 6) + 2;
+                    const mod3 = Math.floor(Math.random() * 8) + 3;
+                    correctAnswer = potenciaModular(base, exp, mod3);
+                    ejercicio = `<div class="card"><h4>Potencia modular:</h4><div class="formula-box">$$${base}^{${exp}} \\pmod{${mod3}}$$</div><div class="input-group"><label>Respuesta:</label><input type="number" id="respuesta-aleatoria"><button class="btn" onclick="verificarAleatorio(${correctAnswer})">Verificar</button></div><div class="result" id="resultado-aleatorio"></div></div>`;
+                    break;
+                case 'inverso':
+                    let num_inv, mod_inv;
+                    do {
+                        num_inv = Math.floor(Math.random() * 15) + 2;
+                        mod_inv = Math.floor(Math.random() * 20) + 5;
+                    } while (gcd(num_inv, mod_inv) !== 1);
+                    const inv_res = euclidesExtendido(num_inv, mod_inv);
+                    correctAnswer = ((inv_res.x % mod_inv) + mod_inv) % mod_inv;
+                    ejercicio = `<div class="card"><h4>Inverso Multiplicativo:</h4><p>Encuentra el inverso de $${num_inv} \\pmod{${mod_inv}}$</p><div class="input-group"><label>Respuesta:</label><input type="number" id="respuesta-aleatoria"><button class="btn" onclick="verificarAleatorio(${correctAnswer})">Verificar</button></div><div class="result" id="resultado-aleatorio"></div></div>`;
+                    break;
+            }
+            container.innerHTML = ejercicio;
+            MathJax.typesetPromise([container]);
+        }
+
+        function verificarAleatorio(correcto) {
+            const respuesta = parseInt(document.getElementById('respuesta-aleatoria').value);
+            const resultado = document.getElementById('resultado-aleatorio');
+            
+            if (respuesta === correcto) {
+                resultado.innerHTML = '✅ ¡Excelente! Respuesta correcta.';
+                resultado.classList.remove('error-result');
+                resultado.classList.add('result');
+            } else {
+                resultado.innerHTML = `❌ Incorrecto. La respuesta correcta es ${correcto}.`;
+                resultado.classList.remove('result');
+                resultado.classList.add('error-result');
+            }
+            MathJax.typesetPromise([resultado]);
+        }
+
+        document.addEventListener('DOMContentLoaded', function() {
+            inicializarMod5();
+            MathJax.typeset();
+        });
+    </script>
+</body>
+</html>
